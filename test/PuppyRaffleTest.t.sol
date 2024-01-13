@@ -213,4 +213,50 @@ contract PuppyRaffleTest is Test {
         puppyRaffle.withdrawFees();
         assertEq(address(feeAddress).balance, expectedPrizeAmount);
     }
+
+
+function test_DenialOfService() public{
+
+
+// lets enter 100 players 
+uint256  playersNum= 100 ; // making a var to staore the number of players to be entered here it is 100
+address[] memory players = new address[](playersNum) ;  // defining an address array to store all the addresses
+
+for(uint i = 0 ; i< players.length ;i++){
+    players[i] = address(i); // typecasting the address using ()
+}
+
+uint gasStart = gasleft();
+puppyRaffle.enterRaffle{ value: entranceFee * playersNum }(players);
+uint gasEnd = gasleft();
+uint gasUsed = gasStart - gasEnd;
+console.log("#################################");
+console.log("Gas used in the transaction:",gasUsed);
+console.log("#################################");
+
+// lets enter 1000 players 
+uint256  playersNum2= 400 ; // making a var to staore the number of players to be entered here it is 100
+address[] memory players2 = new address[](playersNum2) ;  // defining an address array to store all the addresses
+
+for(uint i = 0 ; i< players2.length ;i++){
+    players2[i] = address(i+playersNum); // typecasting the address using ()
+}
+
+uint gasStart2 = gasleft();
+puppyRaffle.enterRaffle{ value: entranceFee * playersNum2 }(players2);
+uint gasEnd2 = gasleft();
+uint gasUsed2 = gasStart2 - gasEnd2;
+console.log("#################################");
+console.log("Gas used in the transaction:",gasUsed2);
+console.log("#################################");
+
+assert(gasUsed2 > gasUsed);
+
+
+}
+
+
+
+
+
 }
